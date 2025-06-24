@@ -1,7 +1,9 @@
 package com.codewithvishal.blog.payloads;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.codewithvishal.blog.entities.Post;
 
@@ -35,5 +37,7 @@ public class UserDto {
 	
 	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Post> posts=new ArrayList<>();
+
+	private Set<RoleDto> roles = new HashSet<>();
 
 }

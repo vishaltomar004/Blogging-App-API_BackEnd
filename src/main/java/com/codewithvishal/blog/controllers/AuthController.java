@@ -1,7 +1,10 @@
 package com.codewithvishal.blog.controllers;
 
 import com.codewithvishal.blog.payloads.AuthRequest;
+import com.codewithvishal.blog.payloads.UserDto;
 import com.codewithvishal.blog.security.JwtUtil;
+import com.codewithvishal.blog.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +24,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    @Autowired
+    private UserService userService;
 
     public AuthController(AuthenticationManager authenticationManager,
                           UserDetailsService userDetailsService,
@@ -47,5 +52,14 @@ public class AuthController {
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(jwt);
+    }
+
+
+    // register new user
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+        UserDto registeredUser = this.userService.registerNewUser(userDto);
+
+        return new ResponseEntity<UserDto>(registeredUser ,HttpStatus.CREATED);
     }
 }
